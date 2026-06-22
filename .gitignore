@@ -1,0 +1,51 @@
+# === Dependencies ===
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# === Next.js ===
+.next/
+out/
+build/
+dist/
+
+# === Production / deploy ===
+.vercel
+
+# === Environment variables (ΠΟΤΕ δεν ανεβαίνουν πραγματικά secrets) ===
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# (το .env.example ΑΝΕΒΑΙΝΕΙ — είναι template χωρίς secrets)
+
+# === TypeScript ===
+*.tsbuildinfo
+next-env.d.ts
+
+# === Testing / coverage ===
+coverage/
+.nyc_output/
+
+# === Logs ===
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# === Editor / OS ===
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
+
+# === Supabase (local dev) ===
+supabase/.temp/
+supabase/.branches/
+**/.env
