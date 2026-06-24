@@ -9,14 +9,14 @@
 - [x] Private GitHub repo
 - [x] Οριστικοποίηση βασικών αποφάσεων: single-unit start (D4), κανόνας δικαιοσύνης (D5), auto+manual (D7)
 - [x] Hosting/βάση: στροφή σε τοπικό **SQLite** (D9 — αντικατέστησε το D8)
-- [ ] Τοπική βάση SQLite & migrations (Drizzle)
+- [x] Τοπική βάση SQLite & migrations (Drizzle)
 
-## Φάση 1 — Υποδομή
-- [ ] Next.js project (App Router + TS + Tailwind)
-- [ ] Setup **Drizzle + better-sqlite3** (σύνδεση σε τοπικό αρχείο `DATABASE_PATH`)
-- [ ] Schema σε Drizzle + migrations για τους πίνακες της Φάσης 0 (`drizzle-kit`)
-- [ ] Seed script (αρχικά/δοκιμαστικά δεδομένα)
-- [ ] «hello world» **τοπικά** (`next dev`) που διαβάζει/γράφει από τη βάση
+## Φάση 1 — Υποδομή ✅
+- [x] Next.js project (App Router + TS + Tailwind v4)
+- [x] Setup **Drizzle + better-sqlite3** (σύνδεση σε τοπικό αρχείο `DATABASE_PATH`)
+- [x] Schema σε Drizzle + migrations για τους πίνακες της Φάσης 0 (`drizzle-kit`)
+- [x] Seed script (ψεύτικα/δοκιμαστικά δεδομένα)
+- [x] «hello world» **τοπικά** που διαβάζει από τη βάση (επαληθεύτηκε με `next start` + HTTP)
 
 ## Φάση 2 — Επεξεργασία / Διαχείριση δεδομένων
 *(προηγείται γιατί τα υπόλοιπα κομμάτια το χρειάζονται)*
