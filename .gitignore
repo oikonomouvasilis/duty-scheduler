@@ -45,7 +45,11 @@ Thumbs.db
 *.swp
 *.swo
 
-# === Supabase (local dev) ===
-supabase/.temp/
-supabase/.branches/
+# === Τοπική βάση SQLite (ΠΟΤΕ δεν ανεβαίνουν δεδομένα — μπορεί να έχουν πραγματικά ονόματα) ===
+data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
 **/.env

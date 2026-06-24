@@ -1,8 +1,23 @@
-# Πρόταση Schema (Supabase / PostgreSQL)
+# Πρόταση Schema (SQLite μέσω Drizzle)
 
 > Draft v0.1 — πρόταση προς συζήτηση, **όχι** τελικό. Στόχος: να καλύπτει τα 4 κομμάτια
 > της εφαρμογής (Υπηρεσίες Μήνα, Ημερολόγιο, Στατιστικά, Επεξεργασία) και να κρατά
 > καθαρά διαχρονικά στατιστικά.
+
+> **Σημείωση (D9):** Το schema σχεδιάστηκε αρχικά για Postgres (D8). Με τη στροφή σε
+> τοπικό **SQLite** οι τύποι παρακάτω είναι «λογικοί» — η πραγματική αποτύπωση γίνεται με
+> **Drizzle** και τις εξής αντιστοιχίες:
+>
+> | Λογικός τύπος (πίνακες κάτω) | SQLite / Drizzle |
+> |---|---|
+> | `uuid PK` | `text` PK (π.χ. `crypto.randomUUID()` στον κώδικα) |
+> | `text`, `int`, `bool` | `text`, `integer`, `integer` (0/1) |
+> | `date` | `text` ISO `YYYY-MM-DD` |
+> | `timestamptz` | `text` ISO 8601 (ή `integer` epoch) |
+> | `jsonb` (π.χ. `schedules.settings`) | `text` με JSON (Drizzle `mode: 'json'`) |
+>
+> Τα ξένα κλειδιά (FK) υποστηρίζονται από το SQLite (με `PRAGMA foreign_keys = ON`).
+> Το **RLS δεν χρειάζεται** τοπικά (single-machine).
 
 ## Βασική ιδέα
 
@@ -144,9 +159,11 @@ calendar_days  (τύπος ημέρας ανά ημερομηνία: καθημ�
 
 ## Ασφάλεια
 
-- **Row Level Security (RLS)** σε όλους τους πίνακες.
-- Service role key μόνο σε server-side κώδικα.
-- Κανένα πραγματικό όνομα στο repo — μόνο στη βάση.
+- **Τοπική βάση (SQLite):** το RLS του Postgres δεν εφαρμόζεται — single-machine, ένας χρήστης.
+- Πρόσβαση στη βάση **μόνο server-side** (server actions / route handlers / RSC) μέσω Drizzle —
+  ποτέ από τον browser.
+- Κανένα πραγματικό όνομα στο repo — μόνο στο τοπικό αρχείο `*.db`, που είναι στο `.gitignore`.
+  (Τοπικά επιτρέπονται πραγματικά ονόματα — βλ. [DECISIONS.md](DECISIONS.md) D9.)
 
 ---
 
