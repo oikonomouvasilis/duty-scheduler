@@ -21,7 +21,7 @@ import {
   cellKey,
 } from "@/lib/schedule";
 import { ActionButton } from "@/components/action-button";
-import { toggleFinalize } from "../actions";
+import { toggleFinalize, generateSchedule, clearAuto } from "../actions";
 import { SettingsPanel } from "./settings-panel";
 import { Grid } from "./grid";
 
@@ -117,6 +117,15 @@ export default async function SchedulePage({
   const settingsCurrent: Record<string, number> = {};
   for (const d of settings.dutyTypes) settingsCurrent[d.dutyTypeId] = d.perDay;
 
+  // Κάλυψη: πόσες θέσεις χρειάζονται vs πόσες είναι γεμάτες (για ενεργές υπηρεσίες).
+  const activeIdSet = new Set(activeDutyIds);
+  const neededTotal =
+    days.length * settings.dutyTypes.reduce((s, d) => s + d.perDay, 0);
+  let filledTotal = 0;
+  for (const ids of Object.values(assignmentsByCell))
+    for (const did of ids) if (activeIdSet.has(did)) filledTotal++;
+  const fullyCovered = neededTotal > 0 && filledTotal >= neededTotal;
+
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-8">
       <Link
@@ -132,10 +141,33 @@ export default async function SchedulePage({
             {monthLabel(schedule.year, schedule.month)}
           </h1>
           <p className="text-sm text-gray-500">
-            {gridPeople.length} άτομα · {activeDuties.length} ενεργές υπηρεσίες
+            {gridPeople.length} άτομα · {activeDuties.length} ενεργές υπηρεσίες ·{" "}
+            <span className={fullyCovered ? "text-green-600" : "text-amber-600"}>
+              κάλυψη {filledTotal}/{neededTotal}
+            </span>
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {!readOnly && activeDuties.length > 0 ? (
+            <>
+              <ActionButton
+                action={generateSchedule}
+                id={schedule.id}
+                className={ui.btn}
+                confirm="Αυτόματη κατανομή για όλον τον μήνα; (διατηρεί τις χειροκίνητες, αντικαθιστά τις προηγούμενες αυτόματες)"
+              >
+                Αυτόματη κατανομή
+              </ActionButton>
+              <ActionButton
+                action={clearAuto}
+                id={schedule.id}
+                className={ui.btnSm}
+                confirm="Να αφαιρεθούν οι αυτόματες εκχωρήσεις; (οι χειροκίνητες μένουν)"
+              >
+                Καθαρισμός auto
+              </ActionButton>
+            </>
+          ) : null}
           <span
             className={`rounded px-2 py-0.5 text-xs font-medium ${
               readOnly

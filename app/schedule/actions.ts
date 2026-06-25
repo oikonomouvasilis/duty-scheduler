@@ -2,17 +2,27 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/db";
 import {
   schedules,
+  people,
   dutyTypes,
+  calendarDays,
   assignments,
   unavailabilities,
   type ScheduleSettings,
 } from "@/db/schema";
 import { ok, fail, type FormResult } from "@/lib/form";
-import { ensureCalendarMonth, getHomeUnitId } from "@/lib/schedule";
+import { monthDates } from "@/lib/dates";
+import {
+  ensureCalendarMonth,
+  getHomeUnitId,
+  allowedRanksByDuty,
+  isHeavyType,
+  cellKey,
+} from "@/lib/schedule";
+import { computeAutoAssignments } from "@/lib/auto-assign";
 
 export async function createSchedule(
   _prev: FormResult,
@@ -205,5 +215,127 @@ export async function setCellDuties(formData: FormData): Promise<FormResult> {
     }
   }
   revalidatePath(`/schedule/${scheduleId}`);
+  return ok();
+}
+
+export async function generateSchedule(
+  formData: FormData,
+): Promise<FormResult> {
+  const id = String(formData.get("id") ?? "");
+  const s = db.select().from(schedules).where(eq(schedules.id, id)).get();
+  if (!s) return fail("Δεν βρέθηκε.");
+  if (s.status === "finalized")
+    return fail("Οριστικοποιημένο — άρε την οριστικοποίηση πρώτα.");
+
+  const settings = (s.settings ?? { dutyTypes: [] }) as ScheduleSettings;
+  if (settings.dutyTypes.length === 0)
+    return fail("Όρισε ενεργές υπηρεσίες στις «Ρυθμίσεις μήνα».");
+
+  // Κράτα τις χειροκίνητες· σβήσε μόνο τις προηγούμενες αυτόματες.
+  db.delete(assignments)
+    .where(and(eq(assignments.scheduleId, id), eq(assignments.source, "auto")))
+    .run();
+
+  const dates = monthDates(s.year, s.month);
+  const calMap = new Map(
+    db
+      .select()
+      .from(calendarDays)
+      .where(inArray(calendarDays.date, dates))
+      .all()
+      .map((r) => [r.date, r.dayType]),
+  );
+  const days = dates.map((date) => ({
+    date,
+    heavy: isHeavyType(calMap.get(date) ?? "weekday"),
+  }));
+
+  const peopleActive = db
+    .select({
+      id: people.id,
+      rankId: people.rankId,
+      serviceStartDate: people.serviceStartDate,
+    })
+    .from(people)
+    .where(eq(people.status, "active"))
+    .all();
+
+  const allowed = allowedRanksByDuty();
+  const rejections = new Set(
+    db
+      .select()
+      .from(unavailabilities)
+      .where(eq(unavailabilities.scheduleId, id))
+      .all()
+      .map((u) => cellKey(u.personId, u.date)),
+  );
+
+  const existing = db
+    .select({
+      personId: assignments.personId,
+      date: assignments.date,
+      dutyTypeId: assignments.dutyTypeId,
+    })
+    .from(assignments)
+    .where(eq(assignments.scheduleId, id))
+    .all();
+
+  // Διαχρονικό φορτίο: ΟΛΕΣ οι εκχωρήσεις (όλων των μηνών) με flag «βαριά».
+  const history = db
+    .select({
+      personId: assignments.personId,
+      dayType: calendarDays.dayType,
+    })
+    .from(assignments)
+    .innerJoin(calendarDays, eq(assignments.date, calendarDays.date))
+    .all()
+    .map((h) => ({ personId: h.personId, heavy: isHeavyType(h.dayType) }));
+
+  const starts = peopleActive
+    .map((p) => p.serviceStartDate)
+    .filter((x): x is string => Boolean(x))
+    .sort();
+  const fallbackStart = starts[0] ?? dates[0];
+
+  const rows = computeAutoAssignments({
+    days,
+    duties: settings.dutyTypes,
+    people: peopleActive,
+    allowed,
+    rejections,
+    existing,
+    history,
+    fallbackStart,
+  });
+
+  if (rows.length > 0) {
+    const unitId = getHomeUnitId();
+    db.insert(assignments)
+      .values(
+        rows.map((r) => ({
+          scheduleId: id,
+          personId: r.personId,
+          dutyTypeId: r.dutyTypeId,
+          unitId,
+          date: r.date,
+          source: "auto" as const,
+        })),
+      )
+      .run();
+  }
+
+  revalidatePath(`/schedule/${id}`);
+  return ok();
+}
+
+export async function clearAuto(formData: FormData): Promise<FormResult> {
+  const id = String(formData.get("id") ?? "");
+  const s = db.select().from(schedules).where(eq(schedules.id, id)).get();
+  if (!s) return fail("Δεν βρέθηκε.");
+  if (s.status === "finalized") return fail("Οριστικοποιημένο.");
+  db.delete(assignments)
+    .where(and(eq(assignments.scheduleId, id), eq(assignments.source, "auto")))
+    .run();
+  revalidatePath(`/schedule/${id}`);
   return ok();
 }
