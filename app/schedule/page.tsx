@@ -31,7 +31,15 @@ export default function ScheduleListPage() {
       <Link href="/" className="text-sm text-gray-400 hover:text-gray-600">
         ← Αρχική
       </Link>
-      <h1 className="mt-2 text-xl font-bold tracking-tight">Υπηρεσίες Μήνα</h1>
+      <div className="mt-2 flex items-center justify-between gap-3">
+        <h1 className="text-xl font-bold tracking-tight">Υπηρεσίες Μήνα</h1>
+        <Link
+          href="/history"
+          className="text-sm text-gray-500 hover:text-gray-700"
+        >
+          Ημερολόγιο Υπηρεσιών →
+        </Link>
+      </div>
 
       <div className={`${ui.card} mt-4 p-4`}>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">

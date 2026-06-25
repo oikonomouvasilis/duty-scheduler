@@ -328,6 +328,27 @@ export async function generateSchedule(
   return ok();
 }
 
+/**
+ * «Διόρθωση παλιού μήνα» (Φάση 4, lean versioning — D10):
+ * ξεκλειδώνει τον οριστικοποιημένο μήνα (status→draft) και ανοίγει τον πίνακα
+ * για επεξεργασία. Δεν κρατάμε ιστορικό εκδόσεων — μόνο το updatedAt ως δείκτη.
+ */
+export async function reopenForEdit(formData: FormData): Promise<FormResult> {
+  const id = String(formData.get("id") ?? "");
+  const s = db.select().from(schedules).where(eq(schedules.id, id)).get();
+  if (!s) return fail("Δεν βρέθηκε.");
+  if (s.status !== "draft") {
+    db.update(schedules)
+      .set({ status: "draft", updatedAt: new Date().toISOString() })
+      .where(eq(schedules.id, id))
+      .run();
+    revalidatePath("/history");
+    revalidatePath(`/history/${id}`);
+    revalidatePath("/schedule");
+  }
+  redirect(`/schedule/${id}`);
+}
+
 export async function clearAuto(formData: FormData): Promise<FormResult> {
   const id = String(formData.get("id") ?? "");
   const s = db.select().from(schedules).where(eq(schedules.id, id)).get();

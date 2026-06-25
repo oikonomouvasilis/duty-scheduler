@@ -1,8 +1,13 @@
 // Server-side helpers για το πρόγραμμα μήνα (χρησιμοποιεί DB — όχι για client).
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { calendarDays, units, dutyTypeRanks } from "@/db/schema";
-import { monthDates, isWeekendIso } from "@/lib/dates";
+import {
+  calendarDays,
+  units,
+  dutyTypeRanks,
+  type ScheduleSettings,
+} from "@/db/schema";
+import { monthDates, isWeekendIso, daysInMonth } from "@/lib/dates";
 
 /** Βαριές μέρες (D5): Σαββατοκύριακα + αργίες + ειδικές. */
 export function isHeavyType(t: string): boolean {
@@ -58,4 +63,18 @@ export function isEligible(
 
 export function cellKey(personId: string, date: string): string {
   return `${personId}|${date}`;
+}
+
+/** Σύνολο θέσεων ανά μέρα από τις ρυθμίσεις του μήνα. */
+export function perDaySum(settings: ScheduleSettings): number {
+  return settings.dutyTypes.reduce((sum, d) => sum + d.perDay, 0);
+}
+
+/** Συνολικές θέσεις που χρειάζονται για τον μήνα (μέρες × θέσεις/μέρα). */
+export function neededSlots(
+  year: number,
+  month: number,
+  settings: ScheduleSettings,
+): number {
+  return daysInMonth(year, month) * perDaySum(settings);
 }

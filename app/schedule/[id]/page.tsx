@@ -128,12 +128,20 @@ export default async function SchedulePage({
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-8">
-      <Link
-        href="/schedule"
-        className="text-sm text-gray-400 hover:text-gray-600"
-      >
-        ← Υπηρεσίες Μήνα
-      </Link>
+      <div className="flex items-center gap-3">
+        <Link
+          href="/schedule"
+          className="text-sm text-gray-400 hover:text-gray-600"
+        >
+          ← Υπηρεσίες Μήνα
+        </Link>
+        <Link
+          href={`/history/${schedule.id}`}
+          className="text-sm text-gray-400 hover:text-gray-600"
+        >
+          Ανασκόπηση →
+        </Link>
+      </div>
 
       <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
         <div>
