@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import {
@@ -40,11 +41,19 @@ export default function Home() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">duty-scheduler</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Φάση 1 — τοπική βάση SQLite (Drizzle + better-sqlite3). Δεδομένα demo.
-        </p>
+      <header className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">duty-scheduler</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Τοπική βάση SQLite (Drizzle + better-sqlite3). Δεδομένα demo.
+          </p>
+        </div>
+        <Link
+          href="/admin"
+          className="shrink-0 rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700"
+        >
+          Διαχείριση →
+        </Link>
       </header>
 
       <section className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
