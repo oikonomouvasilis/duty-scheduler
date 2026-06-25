@@ -48,12 +48,20 @@ export default function Home() {
             Τοπική βάση SQLite (Drizzle + better-sqlite3). Δεδομένα demo.
           </p>
         </div>
-        <Link
-          href="/admin"
-          className="shrink-0 rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700"
-        >
-          Διαχείριση →
-        </Link>
+        <div className="flex shrink-0 gap-2">
+          <Link
+            href="/schedule"
+            className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700"
+          >
+            Υπηρεσίες Μήνα →
+          </Link>
+          <Link
+            href="/admin"
+            className="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Διαχείριση
+          </Link>
+        </div>
       </header>
 
       <section className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
