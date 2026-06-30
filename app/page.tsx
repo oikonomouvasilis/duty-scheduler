@@ -62,6 +62,12 @@ export default function Home() {
             Ημερολόγιο
           </Link>
           <Link
+            href="/stats"
+            className="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Στατιστικά
+          </Link>
+          <Link
             href="/admin"
             className="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >

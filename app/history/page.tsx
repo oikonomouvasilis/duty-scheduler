@@ -58,9 +58,17 @@ export default function HistoryPage() {
       <Link href="/" className="text-sm text-gray-400 hover:text-gray-600">
         ← Αρχική
       </Link>
-      <h1 className="mt-2 text-xl font-bold tracking-tight">
-        Ημερολόγιο Υπηρεσιών
-      </h1>
+      <div className="mt-2 flex items-center justify-between gap-3">
+        <h1 className="text-xl font-bold tracking-tight">
+          Ημερολόγιο Υπηρεσιών
+        </h1>
+        <Link
+          href="/stats"
+          className="text-sm text-gray-500 hover:text-gray-700"
+        >
+          Στατιστικά →
+        </Link>
+      </div>
       <p className="mt-1 text-sm text-gray-500">
         Αρχείο όλων των μηνών — ανασκόπηση και διόρθωση παλιών προγραμμάτων.
       </p>
