@@ -20,10 +20,12 @@ import {
   isHeavyType,
   cellKey,
 } from "@/lib/schedule";
+import { getStats } from "@/lib/stats";
 import { ActionButton } from "@/components/action-button";
 import { toggleFinalize, generateSchedule, clearAuto } from "../actions";
 import { SettingsPanel } from "./settings-panel";
 import { Grid } from "./grid";
+import { FairnessPanel } from "./fairness-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -117,6 +119,19 @@ export default async function SchedulePage({
   const settingsCurrent: Record<string, number> = {};
   for (const d of settings.dutyTypes) settingsCurrent[d.dutyTypeId] = d.perDay;
 
+  // Προεπισκόπηση δικαιοσύνης (Φάση 6, D11): διαχρονική ισορροπία ενεργών ατόμων.
+  // Επαναχρησιμοποιεί τους ίδιους υπολογισμούς με τα Στατιστικά (D5/Φάση 5).
+  const today = new Date().toISOString().slice(0, 10);
+  const fairnessPeople = getStats({}, today)
+    .persons.filter((p) => p.status === "active")
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      rankName: p.rankName,
+      perMonth: p.perMonth,
+      heavyPerMonth: (p.heavy / p.availableDays) * 30,
+    }));
+
   // Κάλυψη: πόσες θέσεις χρειάζονται vs πόσες είναι γεμάτες (για ενεργές υπηρεσίες).
   const activeIdSet = new Set(activeDutyIds);
   const neededTotal =
@@ -206,6 +221,8 @@ export default async function SchedulePage({
         current={settingsCurrent}
         disabled={readOnly}
       />
+
+      <FairnessPanel people={fairnessPeople} />
 
       {activeDuties.length > 0 ? (
         <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
