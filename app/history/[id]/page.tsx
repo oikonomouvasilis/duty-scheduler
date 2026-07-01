@@ -172,6 +172,13 @@ export default async function HistoryReviewPage({
           >
             {finalized ? "οριστικό" : "πρόχειρο"}
           </span>
+          <a
+            href={`/history/${schedule.id}/export`}
+            className={ui.btnSm}
+            download
+          >
+            Κατέβασε CSV
+          </a>
           {finalized ? (
             <ActionButton
               action={reopenForEdit}

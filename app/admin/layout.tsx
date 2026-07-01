@@ -7,6 +7,7 @@ const nav = [
   { href: "/admin/ranks", label: "Βαθμοί" },
   { href: "/admin/duties", label: "Υπηρεσίες" },
   { href: "/admin/calendar", label: "Αργίες / Ειδικές" },
+  { href: "/admin/backup", label: "Αντίγραφα ασφαλείας" },
 ];
 
 export default function AdminLayout({

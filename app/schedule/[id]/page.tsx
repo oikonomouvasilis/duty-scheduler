@@ -200,6 +200,13 @@ export default async function SchedulePage({
           >
             {readOnly ? "οριστικό" : "πρόχειρο"}
           </span>
+          <a
+            href={`/history/${schedule.id}/export`}
+            className={ui.btnSm}
+            download
+          >
+            Κατέβασε CSV
+          </a>
           <ActionButton
             action={toggleFinalize}
             id={schedule.id}
