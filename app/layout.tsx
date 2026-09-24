@@ -3,7 +3,7 @@ import "./globals.css";
 import { Sidenav } from "@/components/sidenav";
 
 export const metadata: Metadata = {
-  title: "duty-scheduler",
+  title: "Υπηρεσίες",
   description: "Αυτοματοποίηση εκχώρησης υπηρεσιών (τοπικά, SQLite)",
 };
 
