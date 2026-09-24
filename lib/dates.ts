@@ -61,3 +61,28 @@ export function daysBetween(aIso: string, bIso: string): number {
 export function monthLabel(year: number, month: number): string {
   return `${MONTHS_EL[month - 1]} ${year}`;
 }
+
+/**
+ * Μήνες μεταξύ δύο ημερομηνιών (inclusive), κλασματικά με βάση τις
+ * **πραγματικές** μέρες κάθε ημερολογιακού μήνα (28/29/30/31) — όχι σταθερές
+ * 30 μέρες. Π.χ. ολόκληρος Φεβρουάριος = 1.0 μήνας, 15 μέρες Ιουλίου ≈ 0.484.
+ */
+export function monthsBetween(aIso: string, bIso: string): number {
+  if (bIso < aIso) return 0;
+  const [ay, am] = aIso.split("-").map(Number);
+  const [by, bm] = bIso.split("-").map(Number);
+  let months = 0;
+  for (let y = ay, m = am; y < by || (y === by && m <= bm); ) {
+    const dim = daysInMonth(y, m);
+    const first = isoDate(y, m, 1);
+    const last = isoDate(y, m, dim);
+    const from = aIso > first ? aIso : first;
+    const to = bIso < last ? bIso : last;
+    months += (daysBetween(from, to) + 1) / dim;
+    if (++m > 12) {
+      m = 1;
+      y++;
+    }
+  }
+  return months;
+}

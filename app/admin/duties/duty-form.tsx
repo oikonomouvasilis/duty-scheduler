@@ -65,7 +65,7 @@ export function DutyForm({
             name="color"
             type="color"
             defaultValue={duty?.color ?? "#3b82f6"}
-            className="h-10 w-full rounded-md border border-gray-300"
+            className="h-10 w-full rounded-md border border-gray-300 dark:border-gray-700"
           />
         </div>
       </div>
@@ -73,7 +73,7 @@ export function DutyForm({
       <div>
         <label className={ui.label}>Ποιοι βαθμοί την κάνουν</label>
         {ranks.length === 0 ? (
-          <p className="text-sm text-gray-400">— δεν υπάρχουν βαθμοί ακόμα —</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500">— δεν υπάρχουν βαθμοί ακόμα —</p>
         ) : (
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {ranks.map((r) => (
@@ -110,7 +110,7 @@ export function DutyForm({
           {submitLabel}
         </button>
         {state.error ? (
-          <p className="text-sm text-red-600">{state.error}</p>
+          <p className="text-sm text-red-600 dark:text-red-400">{state.error}</p>
         ) : null}
       </div>
     </form>

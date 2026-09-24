@@ -11,7 +11,7 @@ const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 const DayInput = z.object({
   date: z.string().trim().regex(DATE_RE, "Επίλεξε ημερομηνία"),
-  dayType: z.enum(["weekday", "weekend", "holiday", "special"]),
+  dayType: z.enum(["holiday", "special"]),
   label: z
     .string()
     .trim()

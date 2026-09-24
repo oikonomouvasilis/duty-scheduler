@@ -39,7 +39,7 @@ export function CreateScheduleForm() {
         Δημιουργία
       </button>
       {state.error ? (
-        <p className="w-full text-sm text-red-600">{state.error}</p>
+        <p className="w-full text-sm text-red-600 dark:text-red-400">{state.error}</p>
       ) : null}
     </form>
   );

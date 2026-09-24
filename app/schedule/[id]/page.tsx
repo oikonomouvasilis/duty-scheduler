@@ -129,7 +129,7 @@ export default async function SchedulePage({
       name: p.name,
       rankName: p.rankName,
       perMonth: p.perMonth,
-      heavyPerMonth: (p.heavy / p.availableDays) * 30,
+      heavyPerMonth: p.months > 0 ? p.heavy / p.months : 0,
     }));
 
   // Κάλυψη: πόσες θέσεις χρειάζονται vs πόσες είναι γεμάτες (για ενεργές υπηρεσίες).
@@ -146,13 +146,13 @@ export default async function SchedulePage({
       <div className="flex items-center gap-3">
         <Link
           href="/schedule"
-          className="text-sm text-gray-400 hover:text-gray-600"
+          className="text-sm text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
         >
           ← Υπηρεσίες Μήνα
         </Link>
         <Link
           href={`/history/${schedule.id}`}
-          className="text-sm text-gray-400 hover:text-gray-600"
+          className="text-sm text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
         >
           Ανασκόπηση →
         </Link>
@@ -160,12 +160,12 @@ export default async function SchedulePage({
 
       <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold tracking-tight">
+          <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
             {monthLabel(schedule.year, schedule.month)}
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             {gridPeople.length} άτομα · {activeDuties.length} ενεργές υπηρεσίες ·{" "}
-            <span className={fullyCovered ? "text-green-600" : "text-amber-600"}>
+            <span className={fullyCovered ? "text-green-600 dark:text-green-400" : "text-amber-600 dark:text-amber-400"}>
               κάλυψη {filledTotal}/{neededTotal}
             </span>
           </p>
@@ -194,8 +194,8 @@ export default async function SchedulePage({
           <span
             className={`rounded px-2 py-0.5 text-xs font-medium ${
               readOnly
-                ? "bg-green-100 text-green-700"
-                : "bg-amber-100 text-amber-700"
+                ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400"
+                : "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400"
             }`}
           >
             {readOnly ? "οριστικό" : "πρόχειρο"}
@@ -232,7 +232,7 @@ export default async function SchedulePage({
       <FairnessPanel people={fairnessPeople} />
 
       {activeDuties.length > 0 ? (
-        <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+        <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
           {activeDuties.map((d) => (
             <span key={d.id} className="inline-flex items-center gap-1.5">
               <span
@@ -243,11 +243,11 @@ export default async function SchedulePage({
             </span>
           ))}
           <span className="inline-flex items-center gap-1.5">
-            <span className="text-red-500">✕</span> απόρριψη
+            <span className="text-red-500 dark:text-red-400">✕</span> απόρριψη
           </span>
         </div>
       ) : (
-        <p className="mt-4 text-sm text-amber-700">
+        <p className="mt-4 text-sm text-amber-700 dark:text-amber-400">
           Δεν έχεις ενεργές υπηρεσίες γι&apos; αυτόν τον μήνα — άνοιξε τις
           «Ρυθμίσεις μήνα».
         </p>

@@ -2,9 +2,8 @@ import { asc } from "drizzle-orm";
 import { db } from "@/db";
 import { ranks } from "@/db/schema";
 import { ui } from "@/lib/ui";
-import { ActionButton } from "@/components/action-button";
 import { RankForm } from "./rank-form";
-import { deleteRank } from "./actions";
+import { RankRow } from "./rank-row";
 
 export const dynamic = "force-dynamic";
 
@@ -17,9 +16,11 @@ export default function RanksPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold tracking-tight">Βαθμοί</h1>
-      <p className="mt-1 text-sm text-gray-500">
-        Η σειρά καθορίζει την ιεραρχική ταξινόμηση στα στατιστικά.
+      <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+        Βαθμοί
+      </h1>
+      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Οι νέοι βαθμοί προστίθενται στο τέλος της λίστας.
       </p>
 
       <div className={`${ui.card} mt-4 p-4`}>
@@ -28,33 +29,22 @@ export default function RanksPage() {
 
       <div className={`${ui.card} mt-6 overflow-hidden`}>
         <table className={ui.table}>
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 dark:bg-white/5">
             <tr>
-              <th className={`${ui.th} w-20`}>Σειρά</th>
               <th className={ui.th}>Όνομα</th>
               <th className={ui.th} />
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
             {rows.map((r) => (
-              <tr key={r.id}>
-                <td className={`${ui.td} text-gray-500`}>{r.sortOrder}</td>
-                <td className={`${ui.td} font-medium`}>{r.name}</td>
-                <td className={`${ui.td} text-right`}>
-                  <ActionButton
-                    action={deleteRank}
-                    id={r.id}
-                    className={ui.btnDanger}
-                    confirm={`Διαγραφή του βαθμού «${r.name}»;`}
-                  >
-                    Διαγραφή
-                  </ActionButton>
-                </td>
-              </tr>
+              <RankRow key={r.id} id={r.id} name={r.name} />
             ))}
             {rows.length === 0 ? (
               <tr>
-                <td className={`${ui.td} text-gray-400`} colSpan={3}>
+                <td
+                  className={`${ui.td} text-gray-400 dark:text-gray-500`}
+                  colSpan={2}
+                >
                   Κανένας βαθμός ακόμα.
                 </td>
               </tr>

@@ -25,8 +25,10 @@ export default function CalendarPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold tracking-tight">Αργίες / Ειδικές μέρες</h1>
-      <p className="mt-1 text-sm text-gray-500">
+      <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+        Αργίες / Ειδικές μέρες
+      </h1>
+      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
         Οι καθημερινές/Σαββατοκύριακα υπολογίζονται αυτόματα — εδώ καταχωρείς μόνο
         τις εξαιρέσεις. Καταχώρηση σε υπάρχουσα ημερομηνία την ενημερώνει.
       </p>
@@ -37,7 +39,7 @@ export default function CalendarPage() {
 
       <div className={`${ui.card} mt-6 overflow-x-auto`}>
         <table className={ui.table}>
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 dark:bg-white/5">
             <tr>
               <th className={ui.th}>Ημερομηνία</th>
               <th className={ui.th}>Τύπος</th>
@@ -45,14 +47,20 @@ export default function CalendarPage() {
               <th className={ui.th} />
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
             {rows.map((d) => (
               <tr key={d.date}>
-                <td className={`${ui.td} font-medium`}>{d.date}</td>
-                <td className={`${ui.td} text-gray-600`}>
+                <td
+                  className={`${ui.td} font-medium text-gray-900 dark:text-gray-100`}
+                >
+                  {d.date}
+                </td>
+                <td className={`${ui.td} text-gray-600 dark:text-gray-400`}>
                   {TYPE_LABEL[d.dayType] ?? d.dayType}
                 </td>
-                <td className={`${ui.td} text-gray-600`}>{d.label ?? "—"}</td>
+                <td className={`${ui.td} text-gray-600 dark:text-gray-400`}>
+                  {d.label ?? "—"}
+                </td>
                 <td className={`${ui.td} text-right`}>
                   <ActionButton
                     action={deleteDay}
@@ -67,7 +75,10 @@ export default function CalendarPage() {
             ))}
             {rows.length === 0 ? (
               <tr>
-                <td className={`${ui.td} text-gray-400`} colSpan={4}>
+                <td
+                  className={`${ui.td} text-gray-400 dark:text-gray-500`}
+                  colSpan={4}
+                >
                   Καμία καταχώρηση ακόμα.
                 </td>
               </tr>

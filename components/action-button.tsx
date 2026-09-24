@@ -38,7 +38,7 @@ export function ActionButton({
         {children}
       </button>
       {state.error ? (
-        <span className="ml-2 align-middle text-xs text-red-600">
+        <span className="ml-2 align-middle text-xs text-red-600 dark:text-red-400">
           {state.error}
         </span>
       ) : null}

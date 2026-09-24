@@ -218,6 +218,89 @@ export async function setCellDuties(formData: FormData): Promise<FormResult> {
   return ok();
 }
 
+/**
+ * Προσθήκη ενός ατόμου σε μία υπηρεσία, για μία συγκεκριμένη ημέρα — χρησιμοποιείται
+ * από το inline «κλικ σε ημερομηνία» στο Ημερολόγιο Υπηρεσιών (ανασκόπηση μήνα).
+ */
+export async function addDayAssignment(formData: FormData): Promise<FormResult> {
+  const scheduleId = String(formData.get("scheduleId") ?? "");
+  const personId = String(formData.get("personId") ?? "");
+  const dutyTypeId = String(formData.get("dutyTypeId") ?? "");
+  const date = String(formData.get("date") ?? "");
+  const guard = guardEditable(scheduleId);
+  if (guard) return guard;
+
+  const already = db
+    .select()
+    .from(assignments)
+    .where(
+      and(
+        eq(assignments.scheduleId, scheduleId),
+        eq(assignments.personId, personId),
+        eq(assignments.dutyTypeId, dutyTypeId),
+        eq(assignments.date, date),
+      ),
+    )
+    .get();
+  if (already) return ok();
+
+  // εκχώρηση σημαίνει «διαθέσιμος» → φύγε τυχόν απόρριψη αυτής της μέρας
+  db.delete(unavailabilities)
+    .where(
+      and(
+        eq(unavailabilities.scheduleId, scheduleId),
+        eq(unavailabilities.personId, personId),
+        eq(unavailabilities.date, date),
+      ),
+    )
+    .run();
+
+  const unitId = getHomeUnitId();
+  try {
+    db.insert(assignments)
+      .values({
+        scheduleId,
+        personId,
+        dutyTypeId,
+        unitId,
+        date,
+        source: "manual",
+      })
+      .run();
+  } catch {
+    return fail("Σφάλμα εκχώρησης.");
+  }
+  revalidatePath(`/history/${scheduleId}`);
+  revalidatePath(`/schedule/${scheduleId}`);
+  return ok();
+}
+
+/** Αφαίρεση ενός ατόμου από μία υπηρεσία, για μία συγκεκριμένη ημέρα. */
+export async function removeDayAssignment(
+  formData: FormData,
+): Promise<FormResult> {
+  const scheduleId = String(formData.get("scheduleId") ?? "");
+  const personId = String(formData.get("personId") ?? "");
+  const dutyTypeId = String(formData.get("dutyTypeId") ?? "");
+  const date = String(formData.get("date") ?? "");
+  const guard = guardEditable(scheduleId);
+  if (guard) return guard;
+
+  db.delete(assignments)
+    .where(
+      and(
+        eq(assignments.scheduleId, scheduleId),
+        eq(assignments.personId, personId),
+        eq(assignments.dutyTypeId, dutyTypeId),
+        eq(assignments.date, date),
+      ),
+    )
+    .run();
+  revalidatePath(`/history/${scheduleId}`);
+  revalidatePath(`/schedule/${scheduleId}`);
+  return ok();
+}
+
 export async function generateSchedule(
   formData: FormData,
 ): Promise<FormResult> {

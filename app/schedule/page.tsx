@@ -28,40 +28,41 @@ export default function ScheduleListPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-8">
-      <Link href="/" className="text-sm text-gray-400 hover:text-gray-600">
-        ← Αρχική
-      </Link>
-      <div className="mt-2 flex items-center justify-between gap-3">
-        <h1 className="text-xl font-bold tracking-tight">Υπηρεσίες Μήνα</h1>
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+          Υπηρεσίες Μήνα
+        </h1>
         <Link
           href="/history"
-          className="text-sm text-gray-500 hover:text-gray-700"
+          className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         >
           Ημερολόγιο Υπηρεσιών →
         </Link>
       </div>
 
       <div className={`${ui.card} mt-4 p-4`}>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
           Νέος μήνας
         </h2>
         <CreateScheduleForm />
       </div>
 
-      <div className={`${ui.card} mt-6 divide-y divide-gray-100`}>
+      <div className={`${ui.card} mt-6 divide-y divide-gray-100 dark:divide-gray-800`}>
         {rows.map((r) => (
           <div key={r.id} className="flex items-center gap-3 p-4">
             <Link href={`/schedule/${r.id}`} className="min-w-0 flex-1">
-              <div className="font-medium">{monthLabel(r.year, r.month)}</div>
-              <div className="text-xs text-gray-400">
+              <div className="font-medium text-gray-900 dark:text-gray-100">
+                {monthLabel(r.year, r.month)}
+              </div>
+              <div className="text-xs text-gray-400 dark:text-gray-500">
                 {countBySchedule.get(r.id) ?? 0} εκχωρήσεις
               </div>
             </Link>
             <span
               className={`rounded px-2 py-0.5 text-xs font-medium ${
                 r.status === "finalized"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-amber-100 text-amber-700"
+                  ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400"
+                  : "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400"
               }`}
             >
               {r.status === "finalized" ? "οριστικό" : "πρόχειρο"}
@@ -80,7 +81,7 @@ export default function ScheduleListPage() {
           </div>
         ))}
         {rows.length === 0 ? (
-          <p className={`${ui.td} text-gray-400`}>Κανένα πρόγραμμα ακόμα.</p>
+          <p className={`${ui.td} text-gray-400 dark:text-gray-500`}>Κανένα πρόγραμμα ακόμα.</p>
         ) : null}
       </div>
     </div>

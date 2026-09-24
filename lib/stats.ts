@@ -7,7 +7,7 @@
 import { and, eq, gte, lte, min } from "drizzle-orm";
 import { db } from "@/db";
 import { assignments, people, ranks, calendarDays } from "@/db/schema";
-import { daysBetween } from "@/lib/dates";
+import { daysBetween, monthsBetween } from "@/lib/dates";
 
 export type DayTypeKey = "weekday" | "weekend" | "holiday" | "special";
 
@@ -48,8 +48,9 @@ export type PersonStat = {
   counts: Record<DayTypeKey, number>;
   total: number;
   heavy: number; // ΣΚ + αργίες + ειδικές
-  availableDays: number; // παρονομαστής κανονικοποίησης (μέρες υπηρεσίας στο παράθυρο)
-  perMonth: number; // ΜΟ υπηρεσιών ανά 30 μέρες υπηρεσίας (κανονικοποιημένο)
+  availableDays: number; // μέρες υπηρεσίας στο παράθυρο (πληροφοριακό)
+  months: number; // μήνες υπηρεσίας στο παράθυρο (πραγματικές μέρες κάθε μήνα)
+  perMonth: number; // ΜΟ υπηρεσιών ανά ημερολογιακό μήνα (κανονικοποιημένο)
 };
 
 export type RankStat = {
@@ -75,10 +76,10 @@ export type StatsResult = {
   };
 };
 
-/** ΜΟ ανά 30 μέρες υπηρεσίας — μικρό, ευανάγνωστο μέγεθος (αντί για ρυθμό/μέρα). */
-function perMonthRate(total: number, availableDays: number): number {
-  if (availableDays <= 0) return 0;
-  return (total / availableDays) * 30;
+/** ΜΟ ανά ημερολογιακό μήνα — παρονομαστής οι πραγματικοί μήνες (28/29/30/31 μέρες), όχι σταθερές 30. */
+function perMonthRate(total: number, months: number): number {
+  if (months <= 0) return 0;
+  return total / months;
 }
 
 export function getStats(filters: StatsFilters, today: string): StatsResult {
@@ -158,6 +159,7 @@ export function getStats(filters: StatsFilters, today: string): StatsResult {
       1,
       daysBetween(effectiveStart, windowEnd) + 1,
     );
+    const months = monthsBetween(effectiveStart, windowEnd);
 
     persons.push({
       id: p.id,
@@ -170,7 +172,8 @@ export function getStats(filters: StatsFilters, today: string): StatsResult {
       total,
       heavy,
       availableDays,
-      perMonth: perMonthRate(total, availableDays),
+      months,
+      perMonth: perMonthRate(total, months),
     });
 
     grandTotal += total;

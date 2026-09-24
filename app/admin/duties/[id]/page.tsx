@@ -35,11 +35,11 @@ export default async function EditDutyPage({
     <div>
       <Link
         href="/admin/duties"
-        className="text-sm text-gray-400 hover:text-gray-600"
+        className="text-sm text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
       >
         ← Υπηρεσίες
       </Link>
-      <h1 className="mt-2 text-xl font-bold tracking-tight">
+      <h1 className="mt-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
         Επεξεργασία υπηρεσίας
       </h1>
 

@@ -44,6 +44,7 @@ Thumbs.db
 !.vscode/extensions.json
 *.swp
 *.swo
+.claude/
 
 # === Τοπική βάση SQLite (ΠΟΤΕ δεν ανεβαίνουν δεδομένα — μπορεί να έχουν πραγματικά ονόματα) ===
 data/

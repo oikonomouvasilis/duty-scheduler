@@ -60,15 +60,17 @@ export function Grid({
         <table className="border-collapse text-sm">
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 border-b border-gray-200 bg-gray-50 px-3 py-2 text-left text-xs font-medium uppercase tracking-wide text-gray-500">
+              <th className="sticky left-0 z-10 border-b border-gray-200 bg-gray-50 px-3 py-2 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400">
                 Άτομο
               </th>
               {days.map((d) => (
                 <th
                   key={d.date}
                   title={d.label ?? undefined}
-                  className={`w-9 border-b border-l border-gray-100 px-0 py-1 text-center text-[11px] font-medium ${
-                    d.heavy ? "bg-amber-50 text-amber-700" : "text-gray-500"
+                  className={`w-9 border-b border-l border-gray-100 px-0 py-1 text-center text-[11px] font-medium dark:border-gray-800 ${
+                    d.heavy
+                      ? "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400"
+                      : "text-gray-500 dark:text-gray-400"
                   }`}
                 >
                   <div>{d.day}</div>
@@ -84,10 +86,12 @@ export function Grid({
               <tr key={p.id} className="group">
                 <th
                   scope="row"
-                  className="sticky left-0 z-10 max-w-[180px] border-b border-gray-100 bg-white px-3 py-1 text-left font-normal"
+                  className="sticky left-0 z-10 max-w-[180px] border-b border-gray-100 bg-white px-3 py-1 text-left font-normal dark:border-gray-800 dark:bg-gray-900"
                 >
-                  <div className="truncate font-medium">{p.name}</div>
-                  <div className="truncate text-[11px] text-gray-400">
+                  <div className="truncate font-medium text-gray-900 dark:text-gray-100">
+                    {p.name}
+                  </div>
+                  <div className="truncate text-[11px] text-gray-400 dark:text-gray-500">
                     {p.rankName ?? "—"}
                     {p.status === "frozen" ? " · παγωμένος" : ""}
                   </div>
@@ -100,8 +104,8 @@ export function Grid({
                   return (
                     <td
                       key={d.date}
-                      className={`border-b border-l border-gray-100 p-0 ${
-                        d.heavy ? "bg-amber-50/40" : ""
+                      className={`border-b border-l border-gray-100 p-0 dark:border-gray-800 ${
+                        d.heavy ? "bg-amber-50/40 dark:bg-amber-500/5" : ""
                       }`}
                     >
                       <button
@@ -110,8 +114,14 @@ export function Grid({
                           setSel({ personId: p.id, date: d.date })
                         }
                         className={`flex h-9 w-9 flex-wrap content-center items-center justify-center gap-0.5 ${
-                          selectedCell ? "ring-2 ring-inset ring-gray-900" : ""
-                        } ${isRej ? "bg-red-50" : "hover:bg-gray-100"}`}
+                          selectedCell
+                            ? "ring-2 ring-inset ring-gray-900 dark:ring-blue-500"
+                            : ""
+                        } ${
+                          isRej
+                            ? "bg-red-50 dark:bg-red-500/10"
+                            : "hover:bg-gray-100 dark:hover:bg-white/5"
+                        }`}
                         title={
                           isRej
                             ? "απόρριψη"
@@ -122,7 +132,7 @@ export function Grid({
                         }
                       >
                         {isRej ? (
-                          <span className="text-xs font-bold text-red-500">
+                          <span className="text-xs font-bold text-red-500 dark:text-red-400">
                             ✕
                           </span>
                         ) : (
@@ -146,7 +156,7 @@ export function Grid({
             {people.length === 0 ? (
               <tr>
                 <td
-                  className="px-3 py-4 text-gray-400"
+                  className="px-3 py-4 text-gray-400 dark:text-gray-500"
                   colSpan={days.length + 1}
                 >
                   Κανένα (μη αρχειοθετημένο) άτομο. Πρόσθεσε από τη Διαχείριση.
@@ -209,16 +219,18 @@ function CellEditor({
     <div className={`${ui.card} mt-4 p-4`}>
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
-          <div className="font-semibold">{person.name}</div>
-          <div className="text-sm text-gray-500">
+          <div className="font-semibold text-gray-900 dark:text-white">
+            {person.name}
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
             {day.day} {WEEKDAYS_EL[day.dow]}
             {day.heavy ? (
-              <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-700">
+              <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
                 βαριά μέρα
               </span>
             ) : null}
             {day.label ? (
-              <span className="ml-2 text-xs text-gray-400">{day.label}</span>
+              <span className="ml-2 text-xs text-gray-400 dark:text-gray-500">{day.label}</span>
             ) : null}
           </div>
         </div>
@@ -228,7 +240,7 @@ function CellEditor({
       </div>
 
       {readOnly ? (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           {rejected
             ? "Απόρριψη."
             : assigned.length
@@ -242,20 +254,20 @@ function CellEditor({
           <input type="hidden" name="scheduleId" value={scheduleId} />
           <input type="hidden" name="personId" value={person.id} />
           <input type="hidden" name="date" value={day.date} />
-          <span className="text-sm text-red-600">
+          <span className="text-sm text-red-600 dark:text-red-400">
             Το άτομο έχει δηλώσει να μην κάνει υπηρεσία.
           </span>
           <button className={ui.btnSm} disabled={rejPending}>
             Άρση απόρριψης
           </button>
           {rejState.error ? (
-            <span className="text-sm text-red-600">{rejState.error}</span>
+            <span className="text-sm text-red-600 dark:text-red-400">{rejState.error}</span>
           ) : null}
         </form>
       ) : (
         <div className="space-y-4">
           {eligible.length === 0 ? (
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-400 dark:text-gray-500">
               Καμία διαθέσιμη υπηρεσία για τον βαθμό του ατόμου (έλεγξε βαθμό /
               ρυθμίσεις μήνα).
             </p>
@@ -292,10 +304,10 @@ function CellEditor({
                   Αποθήκευση
                 </button>
                 {saveState.ok ? (
-                  <span className="text-sm text-green-600">Αποθηκεύτηκε.</span>
+                  <span className="text-sm text-green-600 dark:text-green-400">Αποθηκεύτηκε.</span>
                 ) : null}
                 {saveState.error ? (
-                  <span className="text-sm text-red-600">
+                  <span className="text-sm text-red-600 dark:text-red-400">
                     {saveState.error}
                   </span>
                 ) : null}
@@ -311,7 +323,7 @@ function CellEditor({
               Απόρριψη ημέρας
             </button>
             {rejState.error ? (
-              <span className="ml-2 text-sm text-red-600">
+              <span className="ml-2 text-sm text-red-600 dark:text-red-400">
                 {rejState.error}
               </span>
             ) : null}

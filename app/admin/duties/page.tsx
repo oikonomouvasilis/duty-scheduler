@@ -33,10 +33,12 @@ export default function DutiesPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold tracking-tight">Είδη υπηρεσιών</h1>
+      <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+        Είδη υπηρεσιών
+      </h1>
 
       <div className={`${ui.card} mt-4 p-4`}>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
           Νέα υπηρεσία
         </h2>
         <DutyForm action={createDuty} ranks={rankList} resetOnSuccess />
@@ -44,7 +46,7 @@ export default function DutiesPage() {
 
       <div className={`${ui.card} mt-6 overflow-x-auto`}>
         <table className={ui.table}>
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 dark:bg-white/5">
             <tr>
               <th className={ui.th}>Υπηρεσία</th>
               <th className={ui.th}>Θέσεις/μέρα</th>
@@ -53,10 +55,10 @@ export default function DutiesPage() {
               <th className={ui.th}>Ενέργειες</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
             {duties.map((d) => (
               <tr key={d.id} className={d.active ? "" : "opacity-60"}>
-                <td className={`${ui.td} font-medium`}>
+                <td className={`${ui.td} font-medium text-gray-900 dark:text-gray-100`}>
                   <span className="inline-flex items-center gap-2">
                     <span
                       className="h-3 w-3 rounded-full"
@@ -65,15 +67,15 @@ export default function DutiesPage() {
                     {d.name}
                   </span>
                 </td>
-                <td className={`${ui.td} text-gray-600`}>{d.defaultPerDay}</td>
-                <td className={`${ui.td} text-gray-600`}>
+                <td className={`${ui.td} text-gray-600 dark:text-gray-400`}>{d.defaultPerDay}</td>
+                <td className={`${ui.td} text-gray-600 dark:text-gray-400`}>
                   {(ranksByDuty.get(d.id) ?? []).join(", ") || "—"}
                 </td>
                 <td className={ui.td}>
                   {d.active ? (
-                    <span className="text-green-700">ενεργό</span>
+                    <span className="text-green-700 dark:text-green-400">ενεργό</span>
                   ) : (
-                    <span className="text-gray-400">ανενεργό</span>
+                    <span className="text-gray-400 dark:text-gray-500">ανενεργό</span>
                   )}
                 </td>
                 <td className={ui.td}>
@@ -95,7 +97,7 @@ export default function DutiesPage() {
             ))}
             {duties.length === 0 ? (
               <tr>
-                <td className={`${ui.td} text-gray-400`} colSpan={5}>
+                <td className={`${ui.td} text-gray-400 dark:text-gray-500`} colSpan={5}>
                   Καμία υπηρεσία ακόμα.
                 </td>
               </tr>

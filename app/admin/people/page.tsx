@@ -22,9 +22,9 @@ const STATUS_LABEL: Record<string, string> = {
   archived: "αρχειοθετημένος",
 };
 const STATUS_STYLE: Record<string, string> = {
-  active: "bg-green-100 text-green-700",
-  frozen: "bg-blue-100 text-blue-700",
-  archived: "bg-gray-200 text-gray-600",
+  active: "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400",
+  frozen: "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400",
+  archived: "bg-gray-200 text-gray-600 dark:bg-gray-500/10 dark:text-gray-400",
 };
 
 function StatusBadge({ status }: { status: string }) {
@@ -59,14 +59,16 @@ export default function PeoplePage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold tracking-tight">Προσωπικό</h1>
+      <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+        Προσωπικό
+      </h1>
 
       <div className={`${ui.card} mt-4 p-4`}>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
           Νέο άτομο
         </h2>
         {rankList.length === 0 ? (
-          <p className="mb-3 text-sm text-amber-700">
+          <p className="mb-3 text-sm text-amber-700 dark:text-amber-400">
             Πρόσθεσε πρώτα{" "}
             <Link href="/admin/ranks" className="underline">
               βαθμούς
@@ -79,7 +81,7 @@ export default function PeoplePage() {
 
       <div className={`${ui.card} mt-6 overflow-x-auto`}>
         <table className={ui.table}>
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 dark:bg-white/5">
             <tr>
               <th className={ui.th}>Όνομα</th>
               <th className={ui.th}>Βαθμός</th>
@@ -88,15 +90,15 @@ export default function PeoplePage() {
               <th className={ui.th}>Ενέργειες</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
             {rows.map((p) => (
               <tr key={p.id} className={p.status === "archived" ? "opacity-60" : ""}>
-                <td className={`${ui.td} font-medium`}>{p.fullName}</td>
-                <td className={`${ui.td} text-gray-600`}>{p.rank ?? "—"}</td>
+                <td className={`${ui.td} font-medium text-gray-900 dark:text-gray-100`}>{p.fullName}</td>
+                <td className={`${ui.td} text-gray-600 dark:text-gray-400`}>{p.rank ?? "—"}</td>
                 <td className={ui.td}>
                   <StatusBadge status={p.status} />
                 </td>
-                <td className={`${ui.td} text-gray-600`}>{p.start ?? "—"}</td>
+                <td className={`${ui.td} text-gray-600 dark:text-gray-400`}>{p.start ?? "—"}</td>
                 <td className={ui.td}>
                   <div className="flex flex-wrap gap-2">
                     <Link href={`/admin/people/${p.id}`} className={ui.btnSm}>
@@ -152,7 +154,7 @@ export default function PeoplePage() {
             ))}
             {rows.length === 0 ? (
               <tr>
-                <td className={`${ui.td} text-gray-400`} colSpan={5}>
+                <td className={`${ui.td} text-gray-400 dark:text-gray-500`} colSpan={5}>
                   Κανένα άτομο ακόμα.
                 </td>
               </tr>

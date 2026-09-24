@@ -55,30 +55,30 @@ export default function HistoryPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-8">
-      <Link href="/" className="text-sm text-gray-400 hover:text-gray-600">
-        ← Αρχική
-      </Link>
-      <div className="mt-2 flex items-center justify-between gap-3">
-        <h1 className="text-xl font-bold tracking-tight">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
           Ημερολόγιο Υπηρεσιών
         </h1>
         <Link
           href="/stats"
-          className="text-sm text-gray-500 hover:text-gray-700"
+          className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         >
           Στατιστικά →
         </Link>
       </div>
-      <p className="mt-1 text-sm text-gray-500">
+      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
         Αρχείο όλων των μηνών — ανασκόπηση και διόρθωση παλιών προγραμμάτων.
       </p>
 
       {rows.length === 0 ? (
         <div
-          className={`${ui.card} mt-6 p-6 text-center text-sm text-gray-400`}
+          className={`${ui.card} mt-6 p-6 text-center text-sm text-gray-400 dark:text-gray-500`}
         >
           Κανένας μήνας ακόμα. Δημιούργησε από τις{" "}
-          <Link href="/schedule" className="text-gray-600 underline">
+          <Link
+            href="/schedule"
+            className="text-gray-600 underline dark:text-gray-300"
+          >
             Υπηρεσίες Μήνα
           </Link>
           .
@@ -87,10 +87,12 @@ export default function HistoryPage() {
         <div className="mt-6 space-y-8">
           {years.map((year) => (
             <section key={year}>
-              <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">
+              <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                 {year}
               </h2>
-              <div className={`${ui.card} divide-y divide-gray-100`}>
+              <div
+                className={`${ui.card} divide-y divide-gray-100 dark:divide-gray-800`}
+              >
                 {byYear.get(year)!.map((r) => {
                   const s = summarize(r);
                   return (
@@ -99,15 +101,15 @@ export default function HistoryPage() {
                         href={`/history/${r.id}`}
                         className="min-w-0 flex-1"
                       >
-                        <div className="font-medium">
+                        <div className="font-medium text-gray-900 dark:text-gray-100">
                           {monthLabel(r.year, r.month)}
                         </div>
-                        <div className="text-xs text-gray-400">
+                        <div className="text-xs text-gray-400 dark:text-gray-500">
                           <span
                             className={
                               s.fullyCovered
-                                ? "text-green-600"
-                                : "text-amber-600"
+                                ? "text-green-600 dark:text-green-400"
+                                : "text-amber-600 dark:text-amber-500"
                             }
                           >
                             κάλυψη {s.filled}/{s.needed}
@@ -118,8 +120,8 @@ export default function HistoryPage() {
                       <span
                         className={`rounded px-2 py-0.5 text-xs font-medium ${
                           r.status === "finalized"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-amber-100 text-amber-700"
+                            ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400"
+                            : "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400"
                         }`}
                       >
                         {r.status === "finalized" ? "οριστικό" : "πρόχειρο"}

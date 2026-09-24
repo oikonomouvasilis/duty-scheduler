@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+/* Dark mode με class (.dark στο <html>) αντί για prefers-color-scheme,
+   ώστε να ελέγχεται από το κουμπί εναλλαγής θέματος. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Native controls (date pickers, scrollbars κ.λπ.) ακολουθούν το ενεργό θέμα. */
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}

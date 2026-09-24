@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import {
@@ -41,39 +40,13 @@ export default function Home() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <header className="mb-8 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">duty-scheduler</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Τοπική βάση SQLite (Drizzle + better-sqlite3). Δεδομένα demo.
-          </p>
-        </div>
-        <div className="flex shrink-0 flex-wrap justify-end gap-2">
-          <Link
-            href="/schedule"
-            className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700"
-          >
-            Υπηρεσίες Μήνα →
-          </Link>
-          <Link
-            href="/history"
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Ημερολόγιο
-          </Link>
-          <Link
-            href="/stats"
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Στατιστικά
-          </Link>
-          <Link
-            href="/admin"
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Διαχείριση
-          </Link>
-        </div>
+      <header className="mb-8">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          Αρχική
+        </h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          Τοπική βάση SQLite (Drizzle + better-sqlite3). Δεδομένα demo.
+        </p>
       </header>
 
       <section className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -85,10 +58,12 @@ export default function Home() {
         ].map(([label, n]) => (
           <div
             key={label}
-            className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+            className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900"
           >
-            <div className="text-2xl font-semibold">{n}</div>
-            <div className="text-xs uppercase tracking-wide text-gray-500">
+            <div className="text-2xl font-semibold text-gray-900 dark:text-white">
+              {n}
+            </div>
+            <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
               {label}
             </div>
           </div>
@@ -96,12 +71,12 @@ export default function Home() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
           Προσωπικό
         </h2>
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+            <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500 dark:bg-white/5 dark:text-gray-400">
               <tr>
                 <th className="px-4 py-2 font-medium">Όνομα</th>
                 <th className="px-4 py-2 font-medium">Βαθμός</th>
@@ -109,15 +84,21 @@ export default function Home() {
                 <th className="px-4 py-2 font-medium">Έναρξη</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
               {roster.map((p) => (
                 <tr key={p.id}>
-                  <td className="px-4 py-2 font-medium">{p.name}</td>
-                  <td className="px-4 py-2 text-gray-600">{p.rank ?? "—"}</td>
-                  <td className="px-4 py-2 text-gray-600">
+                  <td className="px-4 py-2 font-medium text-gray-900 dark:text-gray-100">
+                    {p.name}
+                  </td>
+                  <td className="px-4 py-2 text-gray-600 dark:text-gray-400">
+                    {p.rank ?? "—"}
+                  </td>
+                  <td className="px-4 py-2 text-gray-600 dark:text-gray-400">
                     {STATUS_LABEL[p.status] ?? p.status}
                   </td>
-                  <td className="px-4 py-2 text-gray-600">{p.start ?? "—"}</td>
+                  <td className="px-4 py-2 text-gray-600 dark:text-gray-400">
+                    {p.start ?? "—"}
+                  </td>
                 </tr>
               ))}
             </tbody>

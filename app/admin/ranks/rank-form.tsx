@@ -19,20 +19,13 @@ export function RankForm() {
         <label className={ui.label}>Όνομα βαθμού</label>
         <input name="name" className={ui.input} placeholder="π.χ. Λοχίας" />
       </div>
-      <div className="w-24">
-        <label className={ui.label}>Σειρά</label>
-        <input
-          name="sortOrder"
-          type="number"
-          defaultValue={0}
-          className={ui.input}
-        />
-      </div>
       <button className={ui.btn} disabled={pending}>
         Προσθήκη
       </button>
       {state.error ? (
-        <p className="w-full text-sm text-red-600">{state.error}</p>
+        <p className="w-full text-sm text-red-600 dark:text-red-400">
+          {state.error}
+        </p>
       ) : null}
     </form>
   );

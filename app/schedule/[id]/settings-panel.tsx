@@ -30,10 +30,10 @@ export function SettingsPanel({
       <summary className="cursor-pointer px-4 py-3 text-sm font-semibold">
         Ρυθμίσεις μήνα — ενεργές υπηρεσίες &amp; θέσεις/μέρα
       </summary>
-      <form action={action} className="space-y-3 border-t border-gray-100 p-4">
+      <form action={action} className="space-y-3 border-t border-gray-100 p-4 dark:border-gray-800">
         <input type="hidden" name="scheduleId" value={scheduleId} />
         {duties.length === 0 ? (
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-400 dark:text-gray-500">
             Δεν υπάρχουν υπηρεσίες — πρόσθεσε στη Διαχείριση.
           </p>
         ) : (
@@ -57,7 +57,7 @@ export function SettingsPanel({
                     {d.name}
                   </span>
                 </label>
-                <label className="inline-flex items-center gap-2 text-sm text-gray-500">
+                <label className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                   θέσεις/μέρα
                   <input
                     type="number"
@@ -78,10 +78,10 @@ export function SettingsPanel({
               Αποθήκευση ρυθμίσεων
             </button>
             {state.ok ? (
-              <span className="text-sm text-green-600">Αποθηκεύτηκε.</span>
+              <span className="text-sm text-green-600 dark:text-green-400">Αποθηκεύτηκε.</span>
             ) : null}
             {state.error ? (
-              <span className="text-sm text-red-600">{state.error}</span>
+              <span className="text-sm text-red-600 dark:text-red-400">{state.error}</span>
             ) : null}
           </div>
         ) : null}
